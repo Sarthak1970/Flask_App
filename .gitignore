@@ -1,0 +1,10 @@
+myenv
+.env
+# .gitignore
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+*.log
+mongo-data/
