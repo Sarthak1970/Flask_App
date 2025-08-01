@@ -10,7 +10,6 @@ A scalable Flask REST API for performing CRUD operations on a User resource stor
 - User fields: `id` (MongoDB ObjectId), `name`, `email`, `password` (hashed with bcrypt).
 - Modular structure with separated concerns for database, models, services, and routes.
 - Environment-based configuration using `.env`.
-- Dockerized setup with Flask and MongoDB.
 - Comprehensive unit tests using `pytest`.
 - Manual testing with Postman.
 - Logging and error handling for production readiness.
@@ -58,7 +57,7 @@ A scalable Flask REST API for performing CRUD operations on a User resource stor
 
 ### Dockerization
 
-- Dockerized with `Dockerfile` (using `python:3.10-slim` and `gunicorn`) and `docker-compose.yml` for Flask and MongoDB.
+- Dockerized with `Dockerfile` and `docker-compose.yml` for optional deployment.
 - **Benefits**: Simplifies deployment, ensures consistency across environments, and supports scaling on platforms like Render.
 
 ### Unique Constraints
@@ -98,24 +97,30 @@ Update `.env` with:
 
 ```env
 FLASK_ENV=development
-MONGO_URI=mongodb://mongo:27017/user_db
+MONGO_URI=mongodb://localhost:27017/user_db
 ```
 
-### Install Dependencies (optional, for local development)
+> ⚠️ Make sure MongoDB is running locally on your machine. Default URI points to `localhost`.
+
+### Run Locally (Without Docker)
 
 ```bash
+# 1. Create and activate a virtual environment
 python -m venv myenv
 source myenv/bin/activate  # Windows: myenv\Scripts\activate
+
+# 2. Install dependencies
 pip install -r requirements.txt
+
+# 3. Set environment variables (if not using .env)
+export FLASK_ENV=development
+export FLASK_APP=app
+
+# 4. Run the app
+flask run
 ```
 
-### Run with Docker
-
-```bash
-docker-compose up --build
-```
-
-API will be available at: [https://flask-app-rfd9.onrender.com]((https://flask-app-rfd9.onrender.com))
+Your API will be available at: [http://localhost:5000](http://localhost:5000)
 
 ---
 
@@ -123,13 +128,7 @@ API will be available at: [https://flask-app-rfd9.onrender.com]((https://flask-a
 
 ### Unit Testing with `pytest`
 
-Ensure Docker is running:
-
-```bash
-docker-compose up --build -d
-```
-
-Run tests:
+Make sure MongoDB is running locally.
 
 ```bash
 source myenv/bin/activate  # Windows: myenv\Scripts\activate
@@ -153,20 +152,9 @@ pytest -v > test_output.txt
 
 Start the app:
 
-# 1. Create and activate virtual environment
-python -m venv myenv
-source myenv/bin/activate  # On Windows: myenv\Scripts\activate
-
-# 2. Install dependencies
-pip install -r requirements.txt
-
-# 3. Set environment variables (optional if using .env)
-export FLASK_ENV=development
-export FLASK_APP=app
-
-# 4. Run the Flask app
+```bash
 flask run
-
+```
 
 ### Test Cases
 
@@ -252,3 +240,12 @@ flask_user_api/
 
 ---
 
+## 🐳 Optional: Run with Docker (if preferred)
+
+```bash
+docker-compose up --build
+```
+
+This will start both Flask and MongoDB in Docker containers.
+
+API will be available at: [http://localhost:5000](http://localhost:5000)
