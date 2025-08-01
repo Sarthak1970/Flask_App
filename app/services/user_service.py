@@ -8,15 +8,9 @@ logger = logging.getLogger(__name__)
 
 def create_user(db, user_data: User):
     try:
-        # Hash password
         hashed_password = bcrypt.hashpw(user_data.password.encode('utf-8'), bcrypt.gensalt())
         user_dict = user_data.dict(exclude_unset=True)
         user_dict['password'] = hashed_password.decode('utf-8')
-        
-        # Ensure email is unique
-        db.users.create_index("email", unique=True)
-        
-        # Insert user
         result = db.users.insert_one(user_dict)
         user_dict['_id'] = str(result.inserted_id)
         return user_dict
@@ -32,7 +26,7 @@ def get_all_users(db):
         users = list(db.users.find())
         for user in users:
             user['_id'] = str(user['_id'])
-            user.pop('password', None)  # Remove password from response
+            user.pop('password', None)
         return users
     except Exception as e:
         logger.error(f"Error fetching users: {e}")
@@ -56,7 +50,6 @@ def update_user(db, user_id: str, user_data: User):
         user_dict = user_data.dict(exclude_unset=True)
         if 'password' in user_dict:
             user_dict['password'] = bcrypt.hashpw(user_dict['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-        
         result = db.users.update_one(
             {"_id": ObjectId(user_id)},
             {"$set": user_dict}
