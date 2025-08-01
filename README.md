@@ -153,9 +153,20 @@ pytest -v > test_output.txt
 
 Start the app:
 
-```bash
-docker-compose up --build
-```
+# 1. Create and activate virtual environment
+python -m venv myenv
+source myenv/bin/activate  # On Windows: myenv\Scripts\activate
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Set environment variables (optional if using .env)
+export FLASK_ENV=development
+export FLASK_APP=app
+
+# 4. Run the Flask app
+flask run
+
 
 ### Test Cases
 
@@ -240,3 +251,4 @@ flask_user_api/
 ```
 
 ---
+
